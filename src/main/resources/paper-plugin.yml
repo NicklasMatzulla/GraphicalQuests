@@ -1,0 +1,14 @@
+#file: noinspection YAMLSchemaValidation
+name: '$name'
+version: '$version'
+main: 'de.nicklasmatzulla.graphicalquests.GraphicalQuests'
+description: '$description'
+api-version: "$apiVersion"
+authors:
+  - Nicklas Matzulla
+dependencies:
+  server:
+    BetonQuest:
+      load: BEFORE
+      required: true
+      join-classpath: true

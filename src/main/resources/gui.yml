@@ -1,0 +1,49 @@
+#
+# ███╗   ██╗██╗ ██████╗██╗  ██╗██╗      █████╗ ███████╗███╗   ███╗ █████╗ ████████╗███████╗██╗   ██╗██╗     ██╗      █████╗    ██████╗ ███████╗
+# ████╗  ██║██║██╔════╝██║ ██╔╝██║     ██╔══██╗██╔════╝████╗ ████║██╔══██╗╚══██╔══╝╚══███╔╝██║   ██║██║     ██║     ██╔══██╗   ██╔══██╗██╔════╝
+# ██╔██╗ ██║██║██║     █████╔╝ ██║     ███████║███████╗██╔████╔██║███████║   ██║     ███╔╝ ██║   ██║██║     ██║     ███████║   ██║  ██║█████╗
+# ██║╚██╗██║██║██║     ██╔═██╗ ██║     ██╔══██║╚════██║██║╚██╔╝██║██╔══██║   ██║    ███╔╝  ██║   ██║██║     ██║     ██╔══██║   ██║  ██║██╔══╝
+# ██║ ╚████║██║╚██████╗██║  ██╗███████╗██║  ██║███████║██║ ╚═╝ ██║██║  ██║   ██║   ███████╗╚██████╔╝███████╗███████╗██║  ██║██╗██████╔╝███████╗
+# ╚═╝  ╚═══╝╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝ ╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═╝╚═╝╚═════╝ ╚══════╝
+#
+# Copyright 2024 Nicklas Matzulla
+# GraphicalQuests v1.0.0
+#
+
+#
+# In this configuration the gui can be configured.
+# The Minimessage format is supported in the entire configuration.
+# Minimessage documentation: https://docs.advntr.dev/minimessage/format.html
+#
+
+title: "<dark_gray>»</dark_gray> <gradient:#249ae1:#f67200>Manage quests</gradient>"
+
+placeholderItem:
+  material: "BLACK_STAINED_GLASS_PANE"
+  displayName: ""
+
+nextPageItem:
+  material: "ARROW"
+  displayName: "<dark_gray>»</dark_gray> <gradient:#249ae1:#f67200>Next page</gradient>"
+
+previousPageItem:
+  material: "ARROW"
+  displayName: "<dark_gray>»</dark_gray> <gradient:#249ae1:#f67200>Previous page</gradient>"
+
+noObjectives:
+  material: "BARRIER"
+  displayName: "<dark_gray>»</dark_gray> <gradient:#249ae1:#f67200>No objectives</gradient>"
+  lore:
+    - "<dark_gray><strikethrough>■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■</strikethrough></dark_gray>"
+    - ""
+    - "<red><dark_gray>»</dark_gray> You don't have any objectives!</red>"
+    - "<red><dark_gray>»</dark_gray> Come back when you have started a quest.</red>"
+
+infoLore:
+  gui:
+    - ""
+    - "<gray><dark_gray>»</dark_gray> Left click <dark_gray>|</dark_gray> <aqua>Set as compass target</aqua></gray>"
+    - "<gray><dark_gray>»</dark_gray> Right click <dark_gray>|</dark_gray> <aqua>Cancel quest</aqua></gray>"
+  recipeBook:
+    - ""
+    - "<aqua><dark_gray>»</dark_gray> Click to configure</aqua>"
