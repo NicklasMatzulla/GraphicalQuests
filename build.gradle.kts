@@ -32,7 +32,7 @@ plugins {
 }
 
 group = "de.nicklasmatzulla"
-version = "1.0.0"
+version = "1.0.1"
 description = "An addon for BetonQuest to display quests in the recipe book and in a GUI."
 
 repositories {
@@ -69,7 +69,7 @@ tasks {
                 "name" to project.name,
                 "version" to project.version,
                 "description" to project.description,
-                "apiVersion" to "1.19"
+                "apiVersion" to "1.20"
         )
         inputs.properties(props)
         filesMatching("paper-plugin.yml") {

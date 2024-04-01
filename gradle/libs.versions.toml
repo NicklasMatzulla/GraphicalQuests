@@ -4,9 +4,8 @@ shadow = "8.1.1"
 paperweight = "1.5.12"
 lombok = "1.18.32"
 annotations = "24.1.0"
-paperDevBundle = "1.19.4-R0.1-SNAPSHOT"
+paperDevBundle = "1.20.4-R0.1-SNAPSHOT"
 betonQuest = "2.0.1"
-protocolLib = "5.1.0"
 triumphGui = "3.1.7"
 
 [plugins]
