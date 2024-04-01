@@ -54,7 +54,7 @@ public class GraphicalQuests extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        super.onDisable();
+        Bukkit.resetRecipes();
     }
 
 }

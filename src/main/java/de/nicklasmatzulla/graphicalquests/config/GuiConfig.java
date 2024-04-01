@@ -48,15 +48,19 @@ public class GuiConfig extends BaseConfig {
     @Getter(AccessLevel.NONE)
     private final QuestsConfig questsConfig;
 
-    private final Component guiTitle;
-    private final ItemBuilder placeholderItemBuilder;
-    private final ItemBuilder nextPageItemBuilder;
-    private final ItemBuilder previousPageItemBuilder;
-    private final ItemBuilder noObjectivesItemBuilder;
+    private Component guiTitle;
+    private ItemBuilder placeholderItemBuilder;
+    private ItemBuilder nextPageItemBuilder;
+    private ItemBuilder previousPageItemBuilder;
+    private ItemBuilder noObjectivesItemBuilder;
 
     public GuiConfig(final @NotNull QuestsConfig questsConfig) {
         super(new File("plugins/GraphicalQuests/gui.yml"), "gui.yml");
         this.questsConfig = questsConfig;
+        init();
+    }
+
+    public void init() {
         this.guiTitle = getComponent("title");
         this.placeholderItemBuilder = getItemBuilder("placeholderItem");
         this.nextPageItemBuilder = getItemBuilder("nextPageItem");
@@ -78,7 +82,7 @@ public class GuiConfig extends BaseConfig {
     }
 
     private void registerRecipes() {
-        for (final String label : this.questsConfig.LABELS) {
+        for (final String label : this.questsConfig.labels) {
             final ItemBuilder itemBuilder = getRecipeBookObjectiveItemBuilder(label);
             if (itemBuilder == null) {
                 continue;

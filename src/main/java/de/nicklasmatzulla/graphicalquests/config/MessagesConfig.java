@@ -34,22 +34,28 @@ import java.io.File;
 @Getter
 public class MessagesConfig extends BaseConfig {
 
-    private final Component prefixComponent;
-    private final Component onlyPlayersComponent;
-    private final Component objectiveNoLocationComponent;
-    private final Component updatedCompassComponent;
-    private final Component canceledObjectiveComponent;
+    private Component prefixComponent;
+    private Component onlyPlayersComponent;
+    private Component objectiveNoLocationComponent;
+    private Component updatedCompassComponent;
+    private Component canceledObjectiveComponent;
+    private Component reloadedComponent;
 
     public MessagesConfig() {
         super(new File("plugins/GraphicalQuests/messages.yml"), "messages.yml");
+        init();
+    }
+
+    public void init() {
         this.prefixComponent = getComponent("prefix");
         this.onlyPlayersComponent = getPrefixedComponent("onlyPlayers");
         this.objectiveNoLocationComponent = getPrefixedComponent("objectiveNoLocation");
         this.updatedCompassComponent = getPrefixedComponent("updatedCompass");
         this.canceledObjectiveComponent = getPrefixedComponent("canceledObjective");
+        this.reloadedComponent = getPrefixedComponent("reloaded");
     }
 
-    public @NotNull Component getPrefixedComponent(final @NotNull String key, final @NotNull TagResolver... tagResolvers) {
+    private @NotNull Component getPrefixedComponent(final @NotNull String key, final @NotNull TagResolver... tagResolvers) {
         return this.prefixComponent.append(getComponent(key, tagResolvers));
     }
 

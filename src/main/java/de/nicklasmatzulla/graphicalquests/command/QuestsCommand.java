@@ -28,13 +28,19 @@ import de.nicklasmatzulla.graphicalquests.config.GuiConfig;
 import de.nicklasmatzulla.graphicalquests.config.MessagesConfig;
 import de.nicklasmatzulla.graphicalquests.config.QuestsConfig;
 import de.nicklasmatzulla.graphicalquests.gui.QuestsGui;
+import de.nicklasmatzulla.graphicalquests.gui.RecipeBookGui;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 public class QuestsCommand extends Command {
+
+    private static final String RELOAD_PERMISSION = "graphicalquests.reload";
 
     private final MessagesConfig messagesConfig;
     private final QuestsConfig questsConfig;
@@ -49,6 +55,19 @@ public class QuestsCommand extends Command {
 
     @Override
     public boolean execute(@NotNull CommandSender commandSender, @NotNull String s, @NotNull String[] strings) {
+        if (strings.length > 0 && strings[0].equalsIgnoreCase("reload") && commandSender.hasPermission(RELOAD_PERMISSION)) {
+            Bukkit.clearRecipes();
+            this.messagesConfig.load();
+            this.messagesConfig.init();
+            this.guiConfig.load();
+            this.guiConfig.init();
+            this.questsConfig.load();
+            this.questsConfig.init();
+            Bukkit.getOnlinePlayers().forEach(RecipeBookGui::updateRecipeBook);
+            final Component reloadedComponent = this.messagesConfig.getReloadedComponent();
+            commandSender.sendMessage(reloadedComponent);
+            return true;
+        }
         if (!(commandSender instanceof final Player player)) {
             final Component onlyPlayersComponent = this.messagesConfig.getOnlyPlayersComponent();
             commandSender.sendMessage(onlyPlayersComponent);
@@ -58,4 +77,11 @@ public class QuestsCommand extends Command {
         return true;
     }
 
+    @Override
+    public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
+        if (sender.hasPermission(RELOAD_PERMISSION) && args.length == 1) {
+            return List.of("reload");
+        }
+        return List.of();
+    }
 }

@@ -36,14 +36,15 @@ import java.util.Map;
 
 public class QuestsConfig extends BaseConfig {
 
-    protected final List<String> LABELS = new ArrayList<>();
+    protected final List<String> labels = new ArrayList<>();
 
     public QuestsConfig() {
         super(new File("plugins/GraphicalQuests/quests.yml"), "quests.yml");
-        updateQuests();
+        init();
     }
 
-    public void updateQuests() {
+    public void init() {
+        this.labels.clear();
         for (final Map.Entry<String, QuestPackage> entry : Config.getPackages().entrySet()) {
             final String packageName = entry.getKey();
             final QuestPackage questPackage = entry.getValue();
@@ -54,7 +55,7 @@ public class QuestsConfig extends BaseConfig {
             configurationSection.getKeys(false).forEach(objective -> {
                 final String objectiveName = packageName.toLowerCase() + "." + objective.toLowerCase();
                 registerObjective(objectiveName);
-                LABELS.add(objectiveName);
+                labels.add(objectiveName);
             });
         }
         save();

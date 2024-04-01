@@ -60,11 +60,11 @@ public class BaseConfig {
     public BaseConfig(final @NotNull File configFile, final @NotNull String classpathFile) {
         this.configFile = configFile;
         this.classpathFile = classpathFile;
-        loadConfig();
+        load();
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    private void createConfig() {
+    private void create() {
         if (this.configFile.exists()) {
             return;
         }
@@ -79,9 +79,9 @@ public class BaseConfig {
         }
     }
 
-    protected void loadConfig() {
+    public void load() {
         try {
-            createConfig();
+            create();
             this.config = new YamlConfiguration();
             this.config.load(this.configFile);
         } catch (final @NotNull IOException | InvalidConfigurationException e) {
