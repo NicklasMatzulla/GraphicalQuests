@@ -7,7 +7,7 @@
 # ╚═╝  ╚═══╝╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝ ╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═╝╚═╝╚═════╝ ╚══════╝
 #
 # Copyright 2024 Nicklas Matzulla
-# GraphicalQuests v1.1.0
+# GraphicalQuests v1.1.1
 #
 
 #
@@ -32,13 +32,13 @@ previousPageItem:
   material: "ARROW"
   displayName: "<dark_gray>»</dark_gray> <gradient:#249ae1:#f67200>Previous page</gradient>"
 
-noObjectives:
+noQuests:
   material: "BARRIER"
-  displayName: "<dark_gray>»</dark_gray> <gradient:#249ae1:#f67200>No objectives</gradient>"
+  displayName: "<dark_gray>»</dark_gray> <gradient:#249ae1:#f67200>No quests</gradient>"
   lore:
     - "<dark_gray><strikethrough>■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■</strikethrough></dark_gray>"
     - ""
-    - "<red><dark_gray>»</dark_gray> You don't have any objectives!</red>"
+    - "<red><dark_gray>»</dark_gray> You don't have any quests!</red>"
     - "<red><dark_gray>»</dark_gray> Come back when you have started a quest.</red>"
 
 noOtherQuests:

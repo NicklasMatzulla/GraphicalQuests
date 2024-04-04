@@ -43,7 +43,7 @@ public class GuiConfig extends BaseConfig {
     private BaseItemBuilder<?> placeholderItemBuilder;
     private BaseItemBuilder<?> nextPageItemBuilder;
     private BaseItemBuilder<?> previousPageItemBuilder;
-    private BaseItemBuilder<?> noObjectivesItemBuilder;
+    private BaseItemBuilder<?> noQuestsItemsBuilder;
     private BaseItemBuilder<?> noOtherQuestsItemBuilder;
     private BaseItemBuilder<?> noOtherObjectivesItemBuilder;
 
@@ -59,7 +59,7 @@ public class GuiConfig extends BaseConfig {
         this.placeholderItemBuilder = getItemBuilder("placeholderItem");
         this.nextPageItemBuilder = getItemBuilder("nextPageItem");
         this.previousPageItemBuilder = getItemBuilder("previousPageItem");
-        this.noObjectivesItemBuilder = getItemBuilder("noObjectives");
+        this.noQuestsItemsBuilder = getItemBuilder("noQuests");
         this.noOtherQuestsItemBuilder = getItemBuilder("noOtherQuests");
         this.noOtherObjectivesItemBuilder = getItemBuilder("noOtherObjectives");
     }

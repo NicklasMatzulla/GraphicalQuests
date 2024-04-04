@@ -72,20 +72,25 @@ public class QuestsGui {
                 .distinct()
                 .filter(questsConfig::isQuestEnabled)
                 .toList();
-        for (final String questKey : questKeys) {
-            final BaseItemBuilder<?> itemBuilder = questsConfig.getMainGuiItemBuilder(questKey);
-            if (itemBuilder != null) {
-                final GuiItem guiItem = itemBuilder.asGuiItem(event -> openObjectiveGui(messagesConfig, questsConfig, guiConfig, questKey, player));
-                gui.addItem(guiItem);
+        if (questKeys.isEmpty()) {
+            final GuiItem noQuestsGuiItem = guiConfig.getNoQuestsItemsBuilder().asGuiItem();
+            gui.setItem(22, noQuestsGuiItem);
+        } else {
+            for (final String questKey : questKeys) {
+                final BaseItemBuilder<?> itemBuilder = questsConfig.getMainGuiItemBuilder(questKey);
+                if (itemBuilder != null) {
+                    final GuiItem guiItem = itemBuilder.asGuiItem(event -> openObjectiveGui(messagesConfig, questsConfig, guiConfig, questKey, player));
+                    gui.addItem(guiItem);
+                }
             }
-        }
-        final int leftEntries = 5 - questKeys.size() % 5;
-        final GuiItem noOtherQuestsGuiItem = guiConfig.getNoOtherQuestsItemBuilder().asGuiItem();
-        for (int i = 0; i < leftEntries; i++) {
-            gui.addItem(noOtherQuestsGuiItem);
-        }
-        if (gui.getPagesNum() > 1) {
-            gui.setItem(NEXT_PAGE_ITEM_SLOT, createNextPageGuiItem(gui, guiConfig));
+            final int leftEntries = 5 - questKeys.size() % 5;
+            final GuiItem noOtherQuestsGuiItem = guiConfig.getNoOtherQuestsItemBuilder().asGuiItem();
+            for (int i = 0; i < leftEntries; i++) {
+                gui.addItem(noOtherQuestsGuiItem);
+            }
+            if (gui.getPagesNum() > 1) {
+                gui.setItem(NEXT_PAGE_ITEM_SLOT, createNextPageGuiItem(gui, guiConfig));
+            }
         }
         gui.open(player);
     }
@@ -114,59 +119,54 @@ public class QuestsGui {
                 .filter(objectiveKey -> objectiveKey.startsWith(questKey))
                 .filter(questsConfig::isObjectiveEnabled)
                 .toList();
-        if (objectiveKeys.isEmpty()) {
-            final GuiItem noObjectivesGuiItem = guiConfig.getNoObjectivesItemBuilder().asGuiItem();
-            gui.setItem(22, noObjectivesGuiItem);
-        } else {
-            for (final String objectiveKey : objectiveKeys) {
-                final BaseItemBuilder<?> itemBuilder = questsConfig.getObjectiveGuiItemBuilder(objectiveKey);
-                if (itemBuilder != null) {
-                    final GuiItem guiItem = itemBuilder.asGuiItem(event -> {
-                        switch (event.getClick()) {
-                            case LEFT -> {
-                                final String command = questsConfig.getObjectiveCommand(objectiveKey);
-                                if (command == null) {
-                                    final Component objectiveNoCommandComponent = messagesConfig.getObjectiveNoCommandComponent();
-                                    player.sendMessage(objectiveNoCommandComponent);
-                                    return;
-                                }
-                                player.performCommand(command);
-                                gui.close(player);
+        for (final String objectiveKey : objectiveKeys) {
+            final BaseItemBuilder<?> itemBuilder = questsConfig.getObjectiveGuiItemBuilder(objectiveKey);
+            if (itemBuilder != null) {
+                final GuiItem guiItem = itemBuilder.asGuiItem(event -> {
+                    switch (event.getClick()) {
+                        case LEFT -> {
+                            final String command = questsConfig.getObjectiveCommand(objectiveKey);
+                            if (command == null) {
+                                final Component objectiveNoCommandComponent = messagesConfig.getObjectiveNoCommandComponent();
+                                player.sendMessage(objectiveNoCommandComponent);
+                                return;
                             }
-                            case RIGHT -> {
-                                final String[] splitObjectiveKey = objectiveKey.split("\\.");
-                                BetonQuest.getInstance().getPlayerObjectives(profile).stream()
-                                        .filter(objective -> objective.getLabel().equalsIgnoreCase(splitObjectiveKey[0] + "." + splitObjectiveKey[2]))
-                                        .forEach(objective -> objective.cancelObjectiveForPlayer(profile));
-                                gui.close(player);
-                                final Component canceledObjectiveComponent = messagesConfig.getCanceledObjectiveComponent();
-                                player.sendMessage(canceledObjectiveComponent);
-                            }
-                            case DROP -> {
-                                final Location location = questsConfig.getObjectiveLocation(objectiveKey);
-                                if (location == null) {
-                                    final Component objectiveNoLocationComponent = messagesConfig.getObjectiveNoLocationComponent();
-                                    player.sendMessage(objectiveNoLocationComponent);
-                                    return;
-                                }
-                                player.setCompassTarget(location);
-                                gui.close(player);
-                                final Component updatedCompassComponent = messagesConfig.getUpdatedCompassComponent();
-                                player.sendMessage(updatedCompassComponent);
-                            }
+                            player.performCommand(command);
+                            gui.close(player);
                         }
-                    });
-                    gui.addItem(guiItem);
-                }
+                        case RIGHT -> {
+                            final String[] splitObjectiveKey = objectiveKey.split("\\.");
+                            BetonQuest.getInstance().getPlayerObjectives(profile).stream()
+                                    .filter(objective -> objective.getLabel().equalsIgnoreCase(splitObjectiveKey[0] + "." + splitObjectiveKey[2]))
+                                    .forEach(objective -> objective.cancelObjectiveForPlayer(profile));
+                            gui.close(player);
+                            final Component canceledObjectiveComponent = messagesConfig.getCanceledObjectiveComponent();
+                            player.sendMessage(canceledObjectiveComponent);
+                        }
+                        case DROP -> {
+                            final Location location = questsConfig.getObjectiveLocation(objectiveKey);
+                            if (location == null) {
+                                final Component objectiveNoLocationComponent = messagesConfig.getObjectiveNoLocationComponent();
+                                player.sendMessage(objectiveNoLocationComponent);
+                                return;
+                            }
+                            player.setCompassTarget(location);
+                            gui.close(player);
+                            final Component updatedCompassComponent = messagesConfig.getUpdatedCompassComponent();
+                            player.sendMessage(updatedCompassComponent);
+                        }
+                    }
+                });
+                gui.addItem(guiItem);
             }
-            final int leftEntries = 5 - objectiveKeys.size() % 5;
-            final GuiItem noOtherQuestsGuiItem = guiConfig.getNoOtherObjectivesItemBuilder().asGuiItem();
-            for (int i = 0; i < leftEntries; i++) {
-                gui.addItem(noOtherQuestsGuiItem);
-            }
-            if (gui.getPagesNum() > 1) {
-                gui.setItem(NEXT_PAGE_ITEM_SLOT, createNextPageGuiItem(gui, guiConfig));
-            }
+        }
+        final int leftEntries = 5 - objectiveKeys.size() % 5;
+        final GuiItem noOtherQuestsGuiItem = guiConfig.getNoOtherQuestsItemBuilder().asGuiItem();
+        for (int i = 0; i < leftEntries; i++) {
+            gui.addItem(noOtherQuestsGuiItem);
+        }
+        if (gui.getPagesNum() > 1) {
+            gui.setItem(NEXT_PAGE_ITEM_SLOT, createNextPageGuiItem(gui, guiConfig));
         }
         gui.open(player);
     }
