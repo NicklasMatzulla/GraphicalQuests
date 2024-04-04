@@ -63,7 +63,7 @@ public class QuestsCommand extends Command {
             this.guiConfig.init();
             this.questsConfig.load();
             this.questsConfig.init();
-            Bukkit.getOnlinePlayers().forEach(RecipeBookGui::updateRecipeBook);
+            Bukkit.getOnlinePlayers().forEach(player -> RecipeBookGui.updateRecipeBook(this.questsConfig, player));
             final Component reloadedComponent = this.messagesConfig.getReloadedComponent();
             commandSender.sendMessage(reloadedComponent);
             return true;
@@ -73,7 +73,7 @@ public class QuestsCommand extends Command {
             commandSender.sendMessage(onlyPlayersComponent);
             return true;
         }
-        QuestsGui.openQuestsGui(this.messagesConfig, this.questsConfig, this.guiConfig, player, null);
+        QuestsGui.openQuestsGui(this.messagesConfig, this.questsConfig, this.guiConfig, player);
         return true;
     }
 

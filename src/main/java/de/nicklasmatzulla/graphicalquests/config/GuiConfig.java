@@ -24,23 +24,13 @@
 
 package de.nicklasmatzulla.graphicalquests.config;
 
-import dev.triumphteam.gui.builder.item.ItemBuilder;
+import dev.triumphteam.gui.builder.item.BaseItemBuilder;
 import lombok.AccessLevel;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.RecipeChoice;
-import org.bukkit.inventory.ShapelessRecipe;
-import org.bukkit.inventory.recipe.CraftingBookCategory;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 public class GuiConfig extends BaseConfig {
@@ -48,11 +38,14 @@ public class GuiConfig extends BaseConfig {
     @Getter(AccessLevel.NONE)
     private final QuestsConfig questsConfig;
 
-    private Component guiTitle;
-    private ItemBuilder placeholderItemBuilder;
-    private ItemBuilder nextPageItemBuilder;
-    private ItemBuilder previousPageItemBuilder;
-    private ItemBuilder noObjectivesItemBuilder;
+    private Component questsGuiTitle;
+    private Component objectiveGuiTitle;
+    private BaseItemBuilder<?> placeholderItemBuilder;
+    private BaseItemBuilder<?> nextPageItemBuilder;
+    private BaseItemBuilder<?> previousPageItemBuilder;
+    private BaseItemBuilder<?> noObjectivesItemBuilder;
+    private BaseItemBuilder<?> noOtherQuestsItemBuilder;
+    private BaseItemBuilder<?> noOtherObjectivesItemBuilder;
 
     public GuiConfig(final @NotNull QuestsConfig questsConfig) {
         super(new File("plugins/GraphicalQuests/gui.yml"), "gui.yml");
@@ -61,52 +54,14 @@ public class GuiConfig extends BaseConfig {
     }
 
     public void init() {
-        this.guiTitle = getComponent("title");
+        this.questsGuiTitle = getComponent("titles.questsGui");
+        this.objectiveGuiTitle = getComponent("titles.objectiveGui");
         this.placeholderItemBuilder = getItemBuilder("placeholderItem");
         this.nextPageItemBuilder = getItemBuilder("nextPageItem");
         this.previousPageItemBuilder = getItemBuilder("previousPageItem");
         this.noObjectivesItemBuilder = getItemBuilder("noObjectives");
-        registerRecipes();
-    }
-
-    private @Nullable ItemBuilder getRecipeBookObjectiveItemBuilder(final @NotNull String label) {
-        final ItemBuilder itemBuilder = this.questsConfig.getItemBuilder(label + ".item");
-        if (itemBuilder == null) {
-            return null;
-        }
-        final ArrayList<Component> lore = new ArrayList<>(this.questsConfig.getComponentList(label + ".item.lore"));
-        final List<Component> additionalLore = getComponentList("infoLore.recipeBook");
-        lore.addAll(additionalLore);
-        itemBuilder.lore(lore);
-        return itemBuilder;
-    }
-
-    private void registerRecipes() {
-        for (final String label : this.questsConfig.labels) {
-            final ItemBuilder itemBuilder = getRecipeBookObjectiveItemBuilder(label);
-            if (itemBuilder == null) {
-                continue;
-            }
-            final ItemStack itemStack = itemBuilder.build();
-            final NamespacedKey namespacedKey = new NamespacedKey("graphicalquests", label);
-            final ShapelessRecipe recipe = new ShapelessRecipe(namespacedKey, itemStack);
-            recipe.setCategory(CraftingBookCategory.REDSTONE);
-            final ItemStack crafingItemStack = new ItemStack(Material.VOID_AIR);
-            recipe.addIngredient(new RecipeChoice.ExactChoice(crafingItemStack));
-            Bukkit.addRecipe(recipe);
-        }
-    }
-
-    public @Nullable ItemBuilder getGuiObjectiveItemBuilder(final @NotNull String label) {
-        final ItemBuilder itemBuilder = this.questsConfig.getItemBuilder(label + ".item");
-        if (itemBuilder == null) {
-            return null;
-        }
-        final ArrayList<Component> lore = new ArrayList<>(this.questsConfig.getComponentList(label + ".item.lore"));
-        final List<Component> additionalLore = getComponentList("infoLore.gui");
-        lore.addAll(additionalLore);
-        itemBuilder.lore(lore);
-        return itemBuilder;
+        this.noOtherQuestsItemBuilder = getItemBuilder("noOtherQuests");
+        this.noOtherObjectivesItemBuilder = getItemBuilder("noOtherObjectives");
     }
 
 }

@@ -7,12 +7,39 @@
 # ╚═╝  ╚═══╝╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝ ╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═╝╚═╝╚═════╝ ╚══════╝
 #
 # Copyright 2024 Nicklas Matzulla
-# GraphicalQuests v1.0.0
+# GraphicalQuests v1.1.0
 #
 
 #
 # In this configuration quests can be configured.
 # All registered quests are automatically added.
+# The PlaceholderAPI is supported in ItemStacks.
 # The Minimessage format is supported in the entire configuration.
 # Minimessage documentation: https://docs.advntr.dev/minimessage/format.html
 #
+
+woodcutter:
+  enabled: true
+  item:
+    recipeBook:
+      material: REDSTONE
+      customModelData: 0
+      displayName: <dark_gray>»</dark_gray> <gradient:#249ae1:#f67200>woodcutter</gradient>
+      lore:
+        - <dark_gray><strikethrough>■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■</strikethrough></dark_gray>
+        - ''
+        - <gray><dark_gray>»</dark_gray> The description of this objective</gray>
+        - <gray><dark_gray>»</dark_gray> can be edited in the configuration.</gray>
+        - ''
+        - <aqua><dark_gray>»</dark_gray> Click to configure</aqua>
+    gui:
+      material: REDSTONE
+      customModelData: 0
+      displayName: <dark_gray>»</dark_gray> <gradient:#249ae1:#f67200>woodcutter</gradient>
+      lore:
+        - <dark_gray><strikethrough>■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■</strikethrough></dark_gray>
+        - ''
+        - <gray><dark_gray>»</dark_gray> The description of this objective</gray>
+        - <gray><dark_gray>»</dark_gray> can be edited in the configuration.</gray>
+        - ''
+        - <aqua><dark_gray>»</dark_gray> Click to configure</aqua>

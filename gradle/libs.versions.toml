@@ -6,6 +6,7 @@ lombok = "1.18.32"
 annotations = "24.1.0"
 paperDevBundle = "1.20.4-R0.1-SNAPSHOT"
 betonQuest = "2.0.1"
+placeholderApi = "2.11.5"
 triumphGui = "3.1.7"
 
 [plugins]
@@ -18,4 +19,5 @@ lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" 
 annotations = { group = "org.jetbrains", name = "annotations", version.ref = "annotations"}
 paperApi = { group = "io.papermc.paper", name = "paper-api", version.ref = "paperDevBundle" }
 betonQuest = { group = "org.betonquest", name = "betonquest", version.ref = "betonQuest" }
+placeholderApi = { group = "me.clip", name = "placeholderapi", version.ref = "placeholderApi" }
 triumphGui = { group = "dev.triumphteam", name = "triumph-gui", version.ref = "triumphGui" }

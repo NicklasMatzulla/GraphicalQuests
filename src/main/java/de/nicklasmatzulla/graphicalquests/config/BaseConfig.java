@@ -24,7 +24,10 @@
 
 package de.nicklasmatzulla.graphicalquests.config;
 
+import dev.triumphteam.gui.builder.item.BaseItemBuilder;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
+import dev.triumphteam.gui.builder.item.SkullBuilder;
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -37,6 +40,7 @@ import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -135,22 +139,58 @@ public class BaseConfig {
         return new Location(world, x, y, z);
     }
 
-    public @Nullable ItemBuilder getItemBuilder(final @NotNull String label) {
+    @SuppressWarnings("DataFlowIssue")
+    public BaseItemBuilder<?> getItemBuilder(final @Nullable Player player, final @NotNull String label) {
         if (!this.config.contains(label + ".material")) {
             return null;
         }
         final String materialName = this.config.getString(label + ".material");
         final Material material = Material.valueOf(materialName);
-        final ItemBuilder itemBuilder = ItemBuilder.from(material);
+        final BaseItemBuilder<?> itemBuilder;
+        if (material == Material.PLAYER_HEAD) {
+            itemBuilder = ItemBuilder.skull();
+            final String texture = this.config.getString(label + ".texture");
+            ((SkullBuilder) itemBuilder).texture(texture);
+        } else {
+            itemBuilder = ItemBuilder.from(material);
+        }
+        if (this.config.contains(label + ".customModelData")) {
+            final int customModelData = this.config.getInt(label + ".customModelData");
+            itemBuilder.model(customModelData);
+        }
         if (this.config.contains(label + ".displayName")) {
-            final Component displayName = getComponent(label + ".displayName");
+            final Component displayName;
+            if (player != null) {
+                String rawDisplayName = this.config.getString(label + ".displayName");
+                rawDisplayName = PlaceholderAPI.setPlaceholders(player, rawDisplayName);
+                displayName = MINI_MESSAGE.deserialize(rawDisplayName)
+                        .colorIfAbsent(NamedTextColor.GRAY)
+                        .decoration(TextDecoration.ITALIC, false);
+            } else {
+                displayName = getComponent(label + ".displayName");
+            }
             itemBuilder.name(displayName);
         }
         if (this.config.contains(label + ".lore")) {
-            final List<Component> lore = getComponentList(label + ".lore");
+            final List<Component> lore;
+            if (player != null) {
+                List<String> rawLore = this.config.getStringList(label + ".lore");
+                rawLore = PlaceholderAPI.setPlaceholders(player, rawLore);
+                lore = rawLore.stream()
+                        .map(element -> MINI_MESSAGE.deserialize(element)
+                                .colorIfAbsent(NamedTextColor.GRAY)
+                                .decoration(TextDecoration.ITALIC, false))
+                        .toList();
+            } else{
+                lore = getComponentList(label + ".lore");
+            }
             itemBuilder.lore(lore);
         }
         return itemBuilder;
+    }
+
+    public BaseItemBuilder<?> getItemBuilder(final @NotNull String label) {
+        return getItemBuilder(null, label);
     }
 
 }

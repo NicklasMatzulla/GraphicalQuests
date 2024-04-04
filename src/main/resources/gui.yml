@@ -7,7 +7,7 @@
 # ╚═╝  ╚═══╝╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝ ╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═╝╚═╝╚═════╝ ╚══════╝
 #
 # Copyright 2024 Nicklas Matzulla
-# GraphicalQuests v1.0.0
+# GraphicalQuests v1.1.0
 #
 
 #
@@ -16,7 +16,9 @@
 # Minimessage documentation: https://docs.advntr.dev/minimessage/format.html
 #
 
-title: "<dark_gray>»</dark_gray> <gradient:#249ae1:#f67200>Manage quests</gradient>"
+titles:
+  questsGui: "<dark_gray>»</dark_gray> <gradient:#249ae1:#f67200>Manage Quests</gradient>"
+  objectiveGui: "<dark_gray>»</dark_gray> <gradient:#249ae1:#f67200>Manage objectives</gradient>"
 
 placeholderItem:
   material: "BLACK_STAINED_GLASS_PANE"
@@ -39,11 +41,22 @@ noObjectives:
     - "<red><dark_gray>»</dark_gray> You don't have any objectives!</red>"
     - "<red><dark_gray>»</dark_gray> Come back when you have started a quest.</red>"
 
-infoLore:
-  gui:
+noOtherQuests:
+  material: "PLAYER_HEAD"
+  texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmFkYzA0OGE3Y2U3OGY3ZGFkNzJhMDdkYTI3ZDg1YzA5MTY4ODFlNTUyMmVlZWQxZTNkYWYyMTdhMzhjMWEifX19"
+  displayName: "<dark_gray>»</dark_gray> <gradient:#249ae1:#f67200>No other quests</gradient>"
+  lore:
+    - "<dark_gray><strikethrough>■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■</strikethrough></dark_gray>"
     - ""
-    - "<gray><dark_gray>»</dark_gray> Left click <dark_gray>|</dark_gray> <aqua>Set as compass target</aqua></gray>"
-    - "<gray><dark_gray>»</dark_gray> Right click <dark_gray>|</dark_gray> <aqua>Cancel quest</aqua></gray>"
-  recipeBook:
+    - "<red><dark_gray>»</dark_gray> You have not accepted</red>"
+    - "<red><dark_gray>»</dark_gray> any more quests.</red>"
+
+noOtherObjectives:
+  material: "PLAYER_HEAD"
+  texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmFkYzA0OGE3Y2U3OGY3ZGFkNzJhMDdkYTI3ZDg1YzA5MTY4ODFlNTUyMmVlZWQxZTNkYWYyMTdhMzhjMWEifX19"
+  displayName: "<dark_gray>»</dark_gray> <gradient:#249ae1:#f67200>No other objectives</gradient>"
+  lore:
+    - "<dark_gray><strikethrough>■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■</strikethrough></dark_gray>"
     - ""
-    - "<aqua><dark_gray>»</dark_gray> Click to configure</aqua>"
+    - "<red><dark_gray>»</dark_gray> You have not accepted</red>"
+    - "<red><dark_gray>»</dark_gray> any more objectives.</red>"

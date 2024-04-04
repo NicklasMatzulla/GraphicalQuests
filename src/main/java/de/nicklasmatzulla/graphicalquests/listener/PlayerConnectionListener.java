@@ -24,25 +24,38 @@
 
 package de.nicklasmatzulla.graphicalquests.listener;
 
-import de.nicklasmatzulla.graphicalquests.config.GuiConfig;
+import de.nicklasmatzulla.graphicalquests.config.QuestsConfig;
 import de.nicklasmatzulla.graphicalquests.gui.RecipeBookGui;
 import lombok.AllArgsConstructor;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.ServerRecipeBook;
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
 @AllArgsConstructor
-public class PlayerJoinListener implements Listener {
+public class PlayerConnectionListener implements Listener {
 
-    private final GuiConfig guiConfig;
+    private final QuestsConfig questsConfig;
 
     @EventHandler
     public void onPlayerJoinEvent(final @NotNull PlayerJoinEvent event) {
         final Player player = event.getPlayer();
-        RecipeBookGui.updateRecipeBook(player);
+        RecipeBookGui.updateRecipeBook(this.questsConfig, player);
+    }
+
+    @EventHandler
+    public void onPlayerQuitEvent(final @NotNull PlayerQuitEvent event) {
+        final Player player = event.getPlayer();
+        final CraftPlayer craftPlayer = (CraftPlayer) player;
+        final ServerPlayer serverPlayer = craftPlayer.getHandle();
+        final ServerRecipeBook recipeBook = serverPlayer.getRecipeBook();
+        recipeBook.known.clear();
     }
 
 }

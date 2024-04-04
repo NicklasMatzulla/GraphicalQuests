@@ -37,6 +37,7 @@ public class MessagesConfig extends BaseConfig {
     private Component prefixComponent;
     private Component onlyPlayersComponent;
     private Component objectiveNoLocationComponent;
+    private Component objectiveNoCommandComponent;
     private Component updatedCompassComponent;
     private Component canceledObjectiveComponent;
     private Component reloadedComponent;
@@ -50,6 +51,7 @@ public class MessagesConfig extends BaseConfig {
         this.prefixComponent = getComponent("prefix");
         this.onlyPlayersComponent = getPrefixedComponent("onlyPlayers");
         this.objectiveNoLocationComponent = getPrefixedComponent("objectiveNoLocation");
+        this.objectiveNoCommandComponent = getPrefixedComponent("objectiveNoCommand");
         this.updatedCompassComponent = getPrefixedComponent("updatedCompass");
         this.canceledObjectiveComponent = getPrefixedComponent("canceledObjective");
         this.reloadedComponent = getPrefixedComponent("reloaded");

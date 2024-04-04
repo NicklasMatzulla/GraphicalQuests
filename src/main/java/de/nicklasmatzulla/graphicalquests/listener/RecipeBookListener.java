@@ -62,7 +62,7 @@ public class RecipeBookListener implements Listener {
         event.setCancelled(true);
         final Player player = event.getPlayer();
         final String label = event.getRecipe().getKey();
-        QuestsGui.openQuestsGui(this.messagesConfig, this.questsConfig, this.guiConfig, player, label);
+        QuestsGui.openObjectiveGui(this.messagesConfig, this.questsConfig, this.guiConfig, label, player);
     }
 
 }

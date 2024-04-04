@@ -32,13 +32,14 @@ plugins {
 }
 
 group = "de.nicklasmatzulla"
-version = "1.0.1"
+version = "1.1.0"
 description = "An addon for BetonQuest to display quests in the recipe book and in a GUI."
 
 repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://nexus.betonquest.org/repository/betonquest/")
+    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     maven("https://repo.dmulloy2.net/repository/public/")
 }
 
@@ -49,6 +50,7 @@ dependencies {
     paperweight.paperDevBundle(libs.versions.paperDevBundle)
     compileOnly(libs.paperApi)
     compileOnly(libs.betonQuest)
+    compileOnly(libs.placeholderApi)
     implementation(libs.triumphGui)
 }
 

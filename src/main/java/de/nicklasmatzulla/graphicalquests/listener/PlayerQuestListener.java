@@ -24,7 +24,7 @@
 
 package de.nicklasmatzulla.graphicalquests.listener;
 
-import de.nicklasmatzulla.graphicalquests.config.GuiConfig;
+import de.nicklasmatzulla.graphicalquests.config.QuestsConfig;
 import de.nicklasmatzulla.graphicalquests.gui.RecipeBookGui;
 import lombok.AllArgsConstructor;
 import org.betonquest.betonquest.api.PlayerConversationEndEvent;
@@ -38,7 +38,7 @@ import org.jetbrains.annotations.NotNull;
 @AllArgsConstructor
 public class PlayerQuestListener implements Listener {
 
-    private final GuiConfig guiConfig;
+    private final QuestsConfig questsConfig;
 
     @EventHandler
     public void onPlayerObjectiveChangeEvent(final @NotNull PlayerObjectiveChangeEvent event) {
@@ -46,7 +46,7 @@ public class PlayerQuestListener implements Listener {
         if (player == null) {
             return;
         }
-        RecipeBookGui.updateRecipeBook(player);
+        RecipeBookGui.updateRecipeBook(this.questsConfig, player);
     }
 
     @EventHandler
@@ -55,7 +55,7 @@ public class PlayerQuestListener implements Listener {
         if (player == null) {
             return;
         }
-        RecipeBookGui.updateRecipeBook(player);
+        RecipeBookGui.updateRecipeBook(this.questsConfig, player);
     }
 
 }

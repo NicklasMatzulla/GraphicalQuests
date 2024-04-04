@@ -24,19 +24,21 @@
 
 package de.nicklasmatzulla.graphicalquests.config;
 
+import dev.triumphteam.gui.builder.item.BaseItemBuilder;
 import org.betonquest.betonquest.api.config.quest.QuestPackage;
 import org.betonquest.betonquest.config.Config;
+import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class QuestsConfig extends BaseConfig {
-
-    protected final List<String> labels = new ArrayList<>();
 
     public QuestsConfig() {
         super(new File("plugins/GraphicalQuests/quests.yml"), "quests.yml");
@@ -44,7 +46,6 @@ public class QuestsConfig extends BaseConfig {
     }
 
     public void init() {
-        this.labels.clear();
         for (final Map.Entry<String, QuestPackage> entry : Config.getPackages().entrySet()) {
             final String packageName = entry.getKey();
             final QuestPackage questPackage = entry.getValue();
@@ -52,30 +53,100 @@ public class QuestsConfig extends BaseConfig {
             if (configurationSection == null) {
                 continue;
             }
+            registerPackage(packageName);
             configurationSection.getKeys(false).forEach(objective -> {
-                final String objectiveName = packageName.toLowerCase() + "." + objective.toLowerCase();
-                registerObjective(objectiveName);
-                labels.add(objectiveName);
+                final String objectiveKey = packageName.toLowerCase() + ".objectives." + objective.toLowerCase();
+                registerObjective(objectiveKey);
             });
         }
         save();
     }
 
-    private void registerObjective(final @NotNull String label) {
-        if (this.config.contains(label)) {
+    private void registerPackage(final @NotNull String packageName) {
+        if (this.config.contains(packageName)) {
             return;
         }
-        this.config.set(label + ".location.world", "world");
-        this.config.set(label + ".location.x", 0F);
-        this.config.set(label + ".location.y", 0F);
-        this.config.set(label + ".location.z", 0F);
-        this.config.set(label + ".item.material", "REDSTONE");
-        this.config.set(label + ".item.displayName", "<dark_gray>»</dark_gray> <gradient:#249ae1:#f67200>" + label + "</gradient>");
-        this.config.set(label + ".item.lore", List.of(
+        this.config.set(packageName + ".enabled", true);
+        this.config.set(packageName + ".item.recipeBook.material", "REDSTONE");
+        this.config.set(packageName + ".item.recipeBook.customModelData", 0);
+        this.config.set(packageName + ".item.recipeBook.displayName", "<dark_gray>»</dark_gray> <gradient:#249ae1:#f67200>" + packageName + "</gradient>");
+        this.config.set(packageName + ".item.recipeBook.lore", List.of(
                 "<dark_gray><strikethrough>■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■</strikethrough></dark_gray>",
                 "",
                 "<gray><dark_gray>»</dark_gray> The description of this objective</gray>",
-                "<gray><dark_gray>»</dark_gray> can be edited in the configuration.</gray>"
+                "<gray><dark_gray>»</dark_gray> can be edited in the configuration.</gray>",
+                "",
+                "<aqua><dark_gray>»</dark_gray> Click to configure</aqua>"
+        ));
+        this.config.set(packageName + ".item.gui.material", "REDSTONE");
+        this.config.set(packageName + ".item.gui.customModelData", 0);
+        this.config.set(packageName + ".item.gui.displayName", "<dark_gray>»</dark_gray> <gradient:#249ae1:#f67200>" + packageName + "</gradient>");
+        this.config.set(packageName + ".item.gui.lore", List.of(
+                "<dark_gray><strikethrough>■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■</strikethrough></dark_gray>",
+                "",
+                "<gray><dark_gray>»</dark_gray> The description of this objective</gray>",
+                "<gray><dark_gray>»</dark_gray> can be edited in the configuration.</gray>",
+                "",
+                "<aqua><dark_gray>»</dark_gray> Click to configure</aqua>"
         ));
     }
+
+    private void registerObjective(final @NotNull String packagedObjectiveName) {
+        if (this.config.contains(packagedObjectiveName)) {
+            return;
+        }
+        this.config.set(packagedObjectiveName + ".enabled", true);
+        this.config.set(packagedObjectiveName + ".command", "world");
+        this.config.set(packagedObjectiveName + ".location.world", "world");
+        this.config.set(packagedObjectiveName + ".location.x", 0F);
+        this.config.set(packagedObjectiveName + ".location.y", 0F);
+        this.config.set(packagedObjectiveName + ".location.z", 0F);
+        this.config.set(packagedObjectiveName + ".item.material", "REDSTONE");
+        this.config.set(packagedObjectiveName + ".item.customModelData", 0);
+        this.config.set(packagedObjectiveName + ".item.displayName", "<dark_gray>»</dark_gray> <gradient:#249ae1:#f67200>" + packagedObjectiveName + "</gradient>");
+        this.config.set(packagedObjectiveName + ".item.lore", List.of(
+                "<dark_gray><strikethrough>■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■</strikethrough></dark_gray>",
+                "",
+                "<gray><dark_gray>»</dark_gray> The description of this objective</gray>",
+                "<gray><dark_gray>»</dark_gray> can be edited in the configuration.</gray>",
+                "<aqua><dark_gray>»</dark_gray> You're able to use placeholders.</aqua>",
+                "",
+                "<gray><dark_gray>»</dark_gray> Left click <dark_gray>|</dark_gray> <aqua>Execute custom command</aqua></gray>",
+                "<gray><dark_gray>»</dark_gray> Right click <dark_gray>|</dark_gray> <aqua>Cancel objective</aqua></gray>",
+                "<gray><dark_gray>»</dark_gray> Drop <dark_gray>|</dark_gray> <aqua>Set as compass target</aqua></gray>"
+        ));
+    }
+
+    public boolean isQuestEnabled(final @NotNull String questKey) {
+        return this.config.getBoolean(questKey + ".enabled");
+    }
+
+    public boolean isObjectiveEnabled(final @NotNull String objectiveKey) {
+        return this.config.getBoolean(objectiveKey + ".enabled");
+    }
+
+    public @Nullable ItemStack getRecipeBookItemStack(final @NotNull Player player, final @NotNull String questKey) {
+        final BaseItemBuilder<?> itemBuilder = getItemBuilder(player, questKey + ".item.recipeBook");
+        if (itemBuilder == null) {
+            return null;
+        }
+        return itemBuilder.build();
+    }
+
+    public @Nullable BaseItemBuilder<?> getMainGuiItemBuilder(final @NotNull String questKey) {
+        return getItemBuilder(questKey + ".item.gui");
+    }
+
+    public @Nullable String getObjectiveCommand(final @NotNull String objectiveKey) {
+        return this.config.getString(objectiveKey + ".command");
+    }
+
+    public @Nullable Location getObjectiveLocation(final @NotNull String objectiveKey) {
+        return getLocation(objectiveKey + ".location");
+    }
+
+    public @Nullable BaseItemBuilder<?> getObjectiveGuiItemBuilder(final @NotNull String objectiveKey) {
+        return getItemBuilder(objectiveKey + ".item");
+    }
+
 }

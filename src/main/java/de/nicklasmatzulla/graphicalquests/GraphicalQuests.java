@@ -28,7 +28,8 @@ import de.nicklasmatzulla.graphicalquests.command.QuestsCommand;
 import de.nicklasmatzulla.graphicalquests.config.GuiConfig;
 import de.nicklasmatzulla.graphicalquests.config.MessagesConfig;
 import de.nicklasmatzulla.graphicalquests.config.QuestsConfig;
-import de.nicklasmatzulla.graphicalquests.listener.PlayerJoinListener;
+import de.nicklasmatzulla.graphicalquests.gui.RecipeBookGui;
+import de.nicklasmatzulla.graphicalquests.listener.PlayerConnectionListener;
 import de.nicklasmatzulla.graphicalquests.listener.PlayerQuestListener;
 import de.nicklasmatzulla.graphicalquests.listener.RecipeBookListener;
 import org.bukkit.Bukkit;
@@ -45,16 +46,12 @@ public class GraphicalQuests extends JavaPlugin {
         final QuestsConfig questsConfig = new QuestsConfig();
         final GuiConfig guiConfig = new GuiConfig(questsConfig);
         final PluginManager pluginManager = Bukkit.getPluginManager();
-        pluginManager.registerEvents(new PlayerJoinListener(guiConfig), this);
-        pluginManager.registerEvents(new PlayerQuestListener(guiConfig), this);
+        pluginManager.registerEvents(new PlayerConnectionListener(questsConfig), this);
+        pluginManager.registerEvents(new PlayerQuestListener(questsConfig), this);
         pluginManager.registerEvents(new RecipeBookListener(messagesConfig, questsConfig, guiConfig), this);
         final CommandMap commandMap = Bukkit.getCommandMap();
         commandMap.register("", new QuestsCommand(messagesConfig, questsConfig, guiConfig));
-    }
-
-    @Override
-    public void onDisable() {
-        Bukkit.resetRecipes();
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> Bukkit.getOnlinePlayers().forEach(player -> RecipeBookGui.updateRecipeBook(questsConfig, player)), 0, 100);
     }
 
 }

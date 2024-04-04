@@ -7,7 +7,7 @@
 # ╚═╝  ╚═══╝╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝ ╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═╝╚═╝╚═════╝ ╚══════╝
 #
 # Copyright 2024 Nicklas Matzulla
-# GraphicalQuests v1.0.0
+# GraphicalQuests v1.1.0
 #
 
 #
@@ -20,5 +20,6 @@ prefix: "<dark_gray>»</dark_gray> <gradient:#249ae1:#f67200><bold>QUESTS</bold>
 onlyPlayers: "<red>Only players can execute this command!</red>"
 objectiveNoLocation: "<red>This objective does not require a specific location!</red>"
 updatedCompass: "<green>Your compass now points to this objective.</green>"
+objectiveNoCommand: "<red>This objective does not have a command!</red>"
 canceledObjective: "<red>You have successfully canceled the objective.</red>"
 reloaded: "<green>The configurations have been reloaded.</green>"
