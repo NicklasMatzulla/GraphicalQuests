@@ -96,8 +96,8 @@ public class QuestsConfig extends BaseConfig {
             return;
         }
         this.config.set(packagedObjectiveName + ".enabled", true);
-        this.config.set(packagedObjectiveName + ".command", "world");
-        this.config.set(packagedObjectiveName + ".location.world", "world");
+        this.config.set(packagedObjectiveName + ".commands", List.of());
+        this.config.set(packagedObjectiveName + ".location.world", "");
         this.config.set(packagedObjectiveName + ".location.x", 0F);
         this.config.set(packagedObjectiveName + ".location.y", 0F);
         this.config.set(packagedObjectiveName + ".location.z", 0F);
@@ -137,8 +137,8 @@ public class QuestsConfig extends BaseConfig {
         return getItemBuilder(questKey + ".item.gui");
     }
 
-    public @Nullable String getObjectiveCommand(final @NotNull String objectiveKey) {
-        return this.config.getString(objectiveKey + ".command");
+    public @NotNull List<String> getObjectiveCommands(final @NotNull String objectiveKey) {
+        return this.config.getStringList(objectiveKey + ".commands");
     }
 
     public @Nullable Location getObjectiveLocation(final @NotNull String objectiveKey) {

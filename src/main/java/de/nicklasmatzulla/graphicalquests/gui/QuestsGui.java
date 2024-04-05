@@ -125,13 +125,13 @@ public class QuestsGui {
                 final GuiItem guiItem = itemBuilder.asGuiItem(event -> {
                     switch (event.getClick()) {
                         case LEFT -> {
-                            final String command = questsConfig.getObjectiveCommand(objectiveKey);
-                            if (command == null) {
+                            final List<String> commands = questsConfig.getObjectiveCommands(objectiveKey);
+                            if (commands.isEmpty()) {
                                 final Component objectiveNoCommandComponent = messagesConfig.getObjectiveNoCommandComponent();
                                 player.sendMessage(objectiveNoCommandComponent);
                                 return;
                             }
-                            player.performCommand(command);
+                            commands.forEach(player::performCommand);
                             gui.close(player);
                         }
                         case RIGHT -> {

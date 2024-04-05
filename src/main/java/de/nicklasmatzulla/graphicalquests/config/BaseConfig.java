@@ -127,12 +127,11 @@ public class BaseConfig {
 
     @SuppressWarnings("DataFlowIssue")
     public @Nullable Location getLocation(final @NotNull String label) {
-        if (!(this.config.contains(label + ".world") && this.config.contains(label + ".x") &&
-                this.config.contains(label + ".y") && this.config.contains(label + ".z"))) {
-            return null;
-        }
         final String worldName = this.config.getString(label + ".world");
         final World world = Bukkit.getWorld(worldName);
+        if (world == null) {
+            return null;
+        }
         final double x = this.config.getDouble(label + ".x");
         final double y = this.config.getDouble(label + ".y");
         final double z = this.config.getDouble(label + ".z");
