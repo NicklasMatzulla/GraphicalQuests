@@ -53,7 +53,7 @@ public class QuestsConfig extends BaseConfig {
             if (configurationSection == null) {
                 continue;
             }
-            registerPackage(packageName);
+            registerPackage(packageName.toLowerCase());
             configurationSection.getKeys(false).forEach(objective -> {
                 final String objectiveKey = packageName.toLowerCase() + ".objectives." + objective.toLowerCase();
                 registerObjective(objectiveKey);
