@@ -96,7 +96,8 @@ public class QuestsConfig extends BaseConfig {
             return;
         }
         this.config.set(packagedObjectiveName + ".enabled", true);
-        this.config.set(packagedObjectiveName + ".commands", List.of());
+        this.config.set(packagedObjectiveName + ".closeGuiOnCommand", false);
+        this.config.set(packagedObjectiveName + ".commands", List.of("backpack"));
         this.config.set(packagedObjectiveName + ".location.world", "");
         this.config.set(packagedObjectiveName + ".location.x", 0F);
         this.config.set(packagedObjectiveName + ".location.y", 0F);
@@ -112,8 +113,7 @@ public class QuestsConfig extends BaseConfig {
                 "<aqua><dark_gray>»</dark_gray> You're able to use placeholders.</aqua>",
                 "",
                 "<gray><dark_gray>»</dark_gray> Left click <dark_gray>|</dark_gray> <aqua>Execute custom command</aqua></gray>",
-                "<gray><dark_gray>»</dark_gray> Right click <dark_gray>|</dark_gray> <aqua>Cancel objective</aqua></gray>",
-                "<gray><dark_gray>»</dark_gray> Drop <dark_gray>|</dark_gray> <aqua>Set as compass target</aqua></gray>"
+                "<gray><dark_gray>»</dark_gray> Right click <dark_gray>|</dark_gray> <aqua>Set as compass target</aqua></gray>"
         ));
     }
 
@@ -133,8 +133,12 @@ public class QuestsConfig extends BaseConfig {
         return itemBuilder.build();
     }
 
-    public @Nullable BaseItemBuilder<?> getMainGuiItemBuilder(final @NotNull String questKey) {
-        return getItemBuilder(questKey + ".item.gui");
+    public @Nullable BaseItemBuilder<?> getMainGuiItemBuilder(final @NotNull Player player, final @NotNull String questKey) {
+        return getItemBuilder(player, questKey + ".item.gui");
+    }
+
+    public boolean isCloseGuiOnCommand(final @NotNull String objectiveName) {
+        return this.config.getBoolean(objectiveName + ".closeGuiOnCommand");
     }
 
     public @NotNull List<String> getObjectiveCommands(final @NotNull String objectiveKey) {
@@ -145,8 +149,8 @@ public class QuestsConfig extends BaseConfig {
         return getLocation(objectiveKey + ".location");
     }
 
-    public @Nullable BaseItemBuilder<?> getObjectiveGuiItemBuilder(final @NotNull String objectiveKey) {
-        return getItemBuilder(objectiveKey + ".item");
+    public @Nullable BaseItemBuilder<?> getObjectiveGuiItemBuilder(final @NotNull Player player, final @NotNull String objectiveKey) {
+        return getItemBuilder(player, objectiveKey + ".item");
     }
 
 }

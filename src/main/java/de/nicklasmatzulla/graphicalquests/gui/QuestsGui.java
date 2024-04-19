@@ -24,6 +24,8 @@
 
 package de.nicklasmatzulla.graphicalquests.gui;
 
+import calebcompass.calebcompass.util.CompassInstance;
+import calebcompass.calebcompass.util.CompassLocation;
 import de.nicklasmatzulla.graphicalquests.config.GuiConfig;
 import de.nicklasmatzulla.graphicalquests.config.MessagesConfig;
 import de.nicklasmatzulla.graphicalquests.config.QuestsConfig;
@@ -35,11 +37,14 @@ import dev.triumphteam.gui.guis.PaginatedGui;
 import net.kyori.adventure.text.Component;
 import org.betonquest.betonquest.BetonQuest;
 import org.betonquest.betonquest.api.Objective;
+import org.betonquest.betonquest.api.QuestCompassTargetChangeEvent;
 import org.betonquest.betonquest.api.profiles.Profile;
 import org.betonquest.betonquest.utils.PlayerConverter;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -77,8 +82,9 @@ public class QuestsGui {
             gui.setItem(22, noQuestsGuiItem);
         } else {
             for (final String questKey : questKeys) {
-                final BaseItemBuilder<?> itemBuilder = questsConfig.getMainGuiItemBuilder(questKey);
+                final BaseItemBuilder<?> itemBuilder = questsConfig.getMainGuiItemBuilder(player, questKey);
                 if (itemBuilder != null) {
+                    // TODO 20.04.2024: Add cancel quest feature
                     final GuiItem guiItem = itemBuilder.asGuiItem(event -> openObjectiveGui(messagesConfig, questsConfig, guiConfig, questKey, player));
                     gui.addItem(guiItem);
                 }
@@ -120,7 +126,7 @@ public class QuestsGui {
                 .filter(questsConfig::isObjectiveEnabled)
                 .toList();
         for (final String objectiveKey : objectiveKeys) {
-            final BaseItemBuilder<?> itemBuilder = questsConfig.getObjectiveGuiItemBuilder(objectiveKey);
+            final BaseItemBuilder<?> itemBuilder = questsConfig.getObjectiveGuiItemBuilder(player, objectiveKey);
             if (itemBuilder != null) {
                 final GuiItem guiItem = itemBuilder.asGuiItem(event -> {
                     switch (event.getClick()) {
@@ -131,9 +137,12 @@ public class QuestsGui {
                                 player.sendMessage(objectiveNoCommandComponent);
                                 return;
                             }
+                            if (questsConfig.isCloseGuiOnCommand(objectiveKey)) {
+                                gui.close(player);
+                            }
                             commands.forEach(player::performCommand);
-                            gui.close(player);
                         }
+                        /* Feature removed: Cancel objective
                         case RIGHT -> {
                             final String[] splitObjectiveKey = objectiveKey.split("\\.");
                             BetonQuest.getInstance().getPlayerObjectives(profile).stream()
@@ -143,14 +152,32 @@ public class QuestsGui {
                             final Component canceledObjectiveComponent = messagesConfig.getCanceledObjectiveComponent();
                             player.sendMessage(canceledObjectiveComponent);
                         }
-                        case DROP -> {
-                            final Location location = questsConfig.getObjectiveLocation(objectiveKey);
-                            if (location == null) {
+                         */
+                        case RIGHT -> {
+                            final Location compassLocation = questsConfig.getObjectiveLocation(objectiveKey);
+                            if (compassLocation == null) {
                                 final Component objectiveNoLocationComponent = messagesConfig.getObjectiveNoLocationComponent();
                                 player.sendMessage(objectiveNoLocationComponent);
                                 return;
                             }
-                            player.setCompassTarget(location);
+                            player.setCompassTarget(compassLocation);
+
+                            // BetonQuestGUI integration
+                            final QuestCompassTargetChangeEvent questCompassEvent = new QuestCompassTargetChangeEvent(profile, compassLocation);
+                            final PluginManager pluginManager = Bukkit.getPluginManager();
+                            pluginManager.callEvent(questCompassEvent);
+
+                            // CalebCompass integration
+                            CompassLocation hudLocation = CompassInstance.getInstance().getCompassLocation(player);
+                            if (hudLocation == null) {
+                                CompassInstance.getInstance().addCompassLocation(player, player.getLocation(), compassLocation);
+                            }
+                            hudLocation = CompassInstance.getInstance().getCompassLocation(player);
+                            hudLocation.setOrigin(player.getLocation());
+                            hudLocation.setTarget(compassLocation);
+                            hudLocation.setTracking(true);
+                            CompassInstance.getInstance().saveData();
+
                             gui.close(player);
                             final Component updatedCompassComponent = messagesConfig.getUpdatedCompassComponent();
                             player.sendMessage(updatedCompassComponent);

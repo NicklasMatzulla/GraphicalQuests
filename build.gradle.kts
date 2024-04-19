@@ -32,7 +32,7 @@ plugins {
 }
 
 group = "de.nicklasmatzulla"
-version = "1.2.0"
+version = "1.3.0"
 description = "An addon for BetonQuest to display quests in the recipe book and in a GUI."
 
 repositories {
@@ -41,6 +41,7 @@ repositories {
     maven("https://nexus.betonquest.org/repository/betonquest/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     maven("https://repo.dmulloy2.net/repository/public/")
+    maven("https://jitpack.io")
 }
 
 dependencies {
@@ -51,6 +52,7 @@ dependencies {
     compileOnly(libs.paperApi)
     compileOnly(libs.betonQuest)
     compileOnly(libs.placeholderApi)
+    compileOnly(files("libs/CalebCompass.jar"))
     implementation(libs.triumphGui)
 }
 
