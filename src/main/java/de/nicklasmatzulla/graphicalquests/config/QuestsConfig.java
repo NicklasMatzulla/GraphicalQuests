@@ -112,7 +112,7 @@ public class QuestsConfig extends BaseConfig {
                 "<gray><dark_gray>»</dark_gray> can be edited in the configuration.</gray>",
                 "<aqua><dark_gray>»</dark_gray> You're able to use placeholders.</aqua>",
                 "",
-                "<gray><dark_gray>»</dark_gray> Left click <dark_gray>|</dark_gray> <aqua>Execute custom command</aqua></gray>",
+                "<gray><dark_gray>»</dark_gray> Left click <dark_gray>|</dark_gray> <aqua>Open quest backpack</aqua></gray>",
                 "<gray><dark_gray>»</dark_gray> Right click <dark_gray>|</dark_gray> <aqua>Set as compass target</aqua></gray>"
         ));
     }

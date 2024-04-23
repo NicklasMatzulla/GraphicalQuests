@@ -188,9 +188,9 @@ public class QuestsGui {
             }
         }
         final int leftEntries = 5 - objectiveKeys.size() % 5;
-        final GuiItem noOtherQuestsGuiItem = guiConfig.getNoOtherQuestsItemBuilder().asGuiItem();
+        final GuiItem noOtherObjectivesGuiItem = guiConfig.getNoOtherObjectivesItemBuilder().asGuiItem();
         for (int i = 0; i < leftEntries; i++) {
-            gui.addItem(noOtherQuestsGuiItem);
+            gui.addItem(noOtherObjectivesGuiItem);
         }
         if (gui.getPagesNum() > 1) {
             gui.setItem(NEXT_PAGE_ITEM_SLOT, createNextPageGuiItem(gui, guiConfig));
