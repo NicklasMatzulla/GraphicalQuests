@@ -7,13 +7,13 @@
 # ╚═╝  ╚═══╝╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝ ╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═╝╚═╝╚═════╝ ╚══════╝
 #
 # Copyright 2024 Nicklas Matzulla
-# GraphicalQuests v1.3.0
+# GraphicalQuests v1.4.0
 #
 
 #
 # In this configuration messages can be configured.
-# The Minimessage format is supported in the entire configuration.
-# Minimessage documentation: https://docs.advntr.dev/minimessage/format.html
+# The MiniMessage format is supported in the entire configuration.
+# MiniMessage documentation: https://docs.advntr.dev/minimessage/format.html
 #
 
 prefix: "<dark_gray>»</dark_gray> <gradient:#249ae1:#f67200><bold>QUESTS</bold></gradient> <dark_gray>|</dark_gray> "

@@ -44,6 +44,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.jetbrains.annotations.NotNull;
 
@@ -51,24 +52,26 @@ import java.util.List;
 
 public class QuestsGui {
 
-    private static final short[] HIDDEN_SLOTS = new short[]{10,11,12,13,14,15,16,19,25,28,29,30,31,32,33,34};
-    private static final int PREVIOUS_PAGE_ITEM_SLOT = 37;
-    private static final int NEXT_PAGE_ITEM_SLOT = 43;
-
     @SuppressWarnings("DuplicatedCode")
     public static void openQuestsGui(final @NotNull MessagesConfig messagesConfig, final @NotNull QuestsConfig questsConfig, final @NotNull GuiConfig guiConfig, final @NotNull Player player) {
-        final Component title = guiConfig.getQuestsGuiTitle();
+        final int rows = guiConfig.getQuestsGuiRows();
+        final Component title = guiConfig.getQuestsGuiTitle(player);
         final PaginatedGui gui = Gui.paginated()
+                .rows(rows)
                 .title(title)
-                .rows(5)
-                .pageSize(5)
                 .disableAllInteractions()
+                .pageSize(5)
                 .create();
-        final GuiItem placeholderGuiItem = guiConfig.getPlaceholderItemBuilder().asGuiItem();
-        gui.getFiller().fillBorder(placeholderGuiItem);
-        final GuiItem invisibleGuiItem = ItemBuilder.from(Material.AIR).asGuiItem();
-        for (final int slot : HIDDEN_SLOTS) {
-            gui.setItem(slot, invisibleGuiItem);
+        final GuiItem placeholderGuiItem = guiConfig.getPlaceholderItemBuilder(player).asGuiItem();
+        final List<Integer> placeholderSlots = guiConfig.getQuestsGuiPlaceholderSlots();
+        for (final int slot : placeholderSlots) {
+            gui.setItem(slot, placeholderGuiItem);
+        }
+        final GuiItem emptyGuiItem = ItemBuilder.from(Material.AIR).asGuiItem();
+        for (int slot = 0; slot < 11; slot++) {
+            if (gui.getGuiItem(slot) == null) {
+                gui.setItem(slot, emptyGuiItem);
+            }
         }
         final Profile profile = PlayerConverter.getID(player);
         final List<String> questKeys = BetonQuest.getInstance().getPlayerObjectives(profile).stream()
@@ -78,8 +81,9 @@ public class QuestsGui {
                 .filter(questsConfig::isQuestEnabled)
                 .toList();
         if (questKeys.isEmpty()) {
-            final GuiItem noQuestsGuiItem = guiConfig.getNoQuestsItemsBuilder().asGuiItem();
-            gui.setItem(22, noQuestsGuiItem);
+            final GuiItem noQuestsGuiItem = guiConfig.getQuestsGuiNoQuestsItemBuilder(player).asGuiItem();
+            final int slot = guiConfig.getQuestsGuiNoQuestsItemSlot();
+            gui.setItem(slot, noQuestsGuiItem);
         } else {
             for (final String questKey : questKeys) {
                 final BaseItemBuilder<?> itemBuilder = questsConfig.getMainGuiItemBuilder(player, questKey);
@@ -90,12 +94,19 @@ public class QuestsGui {
                 }
             }
             final int leftEntries = 5 - questKeys.size() % 5;
-            final GuiItem noOtherQuestsGuiItem = guiConfig.getNoOtherQuestsItemBuilder().asGuiItem();
+            final GuiItem noOtherQuestsGuiItem = guiConfig.getQuestsGuiNoOtherQuestsItemBuilder(player).asGuiItem();
             for (int i = 0; i < leftEntries; i++) {
                 gui.addItem(noOtherQuestsGuiItem);
             }
             if (gui.getPagesNum() > 1) {
-                gui.setItem(NEXT_PAGE_ITEM_SLOT, createNextPageGuiItem(gui, guiConfig));
+                final int nextPageSlot = guiConfig.getQuestsGuiNextPageItemSlot();
+                final int previousPageSlot = guiConfig.getQuestsGuiPreviousPageItemSlot();
+                final BaseItemBuilder<?> placeholderItemBuilder = guiConfig.getPlaceholderItemBuilder(player);
+                final BaseItemBuilder<?> nextPageItemBuilder = guiConfig.getQuestsGuiNextPageItemBuilder(player);
+                final BaseItemBuilder<?> previousPageItemBuilder = guiConfig.getQuestsGuiPreviousPageItemBuilder(player);
+                final boolean hasNextPageSlotPlaceholder = placeholderSlots.contains(nextPageSlot);
+                final boolean hasPreviousPageSlotPlaceholder = placeholderSlots.contains(previousPageSlot);
+                gui.setItem(nextPageSlot, createNextPageGuiItem(nextPageSlot, previousPageSlot, hasNextPageSlotPlaceholder, nextPageItemBuilder, hasPreviousPageSlotPlaceholder, previousPageItemBuilder, placeholderItemBuilder, gui));
             }
         }
         gui.open(player);
@@ -103,18 +114,24 @@ public class QuestsGui {
 
     @SuppressWarnings("DuplicatedCode")
     public static void openObjectiveGui(final @NotNull MessagesConfig messagesConfig, final @NotNull QuestsConfig questsConfig, final @NotNull GuiConfig guiConfig, final @NotNull String questKey, final @NotNull Player player) {
-        final Component title = guiConfig.getObjectiveGuiTitle();
+        final int rows = guiConfig.getObjectivesGuiRows();
+        final Component title = guiConfig.getObjectivesGuiTitle(player);
         final PaginatedGui gui = Gui.paginated()
                 .title(title)
-                .rows(5)
+                .rows(rows)
                 .pageSize(5)
                 .disableAllInteractions()
                 .create();
-        final GuiItem placeholderGuiItem = guiConfig.getPlaceholderItemBuilder().asGuiItem();
-        gui.getFiller().fillBorder(placeholderGuiItem);
-        final GuiItem invisibleGuiItem = ItemBuilder.from(Material.AIR).asGuiItem();
-        for (final int slot : HIDDEN_SLOTS) {
-            gui.setItem(slot, invisibleGuiItem);
+        final GuiItem placeholderGuiItem = guiConfig.getPlaceholderItemBuilder(player).asGuiItem();
+        final List<Integer> placeholderSlots = guiConfig.getQuestsGuiPlaceholderSlots();
+        for (final int slot : placeholderSlots) {
+            gui.setItem(slot, placeholderGuiItem);
+        }
+        final GuiItem emptyGuiItem = ItemBuilder.from(Material.AIR).asGuiItem();
+        for (int slot = 0; slot < 11; slot++) {
+            if (gui.getGuiItem(slot) == null) {
+                gui.setItem(slot, emptyGuiItem);
+            }
         }
         final Profile profile = PlayerConverter.getID(player);
         final List<String> objectiveKeys = BetonQuest.getInstance().getPlayerObjectives(profile).stream()
@@ -188,35 +205,54 @@ public class QuestsGui {
             }
         }
         final int leftEntries = 5 - objectiveKeys.size() % 5;
-        final GuiItem noOtherObjectivesGuiItem = guiConfig.getNoOtherObjectivesItemBuilder().asGuiItem();
+        final GuiItem noOtherObjectivesGuiItem = guiConfig.getObjectivesGuiNoOtherObjectivesItemBuilder(player).asGuiItem();
         for (int i = 0; i < leftEntries; i++) {
             gui.addItem(noOtherObjectivesGuiItem);
         }
         if (gui.getPagesNum() > 1) {
-            gui.setItem(NEXT_PAGE_ITEM_SLOT, createNextPageGuiItem(gui, guiConfig));
+            final int nextPageSlot = guiConfig.getObjectivesGuiNextPageItemSlot();
+            final int previousPageSlot = guiConfig.getObjectivesGuiPreviousPageItemSlot();
+            final BaseItemBuilder<?> placeholderItemBuilder = guiConfig.getPlaceholderItemBuilder(player);
+            final BaseItemBuilder<?> nextPageItemBuilder = guiConfig.getObjectivesGuiNextPageItemBuilder(player);
+            final BaseItemBuilder<?> previousPageItemBuilder = guiConfig.getObjectivesGuiPreviousPageItemBuilder(player);
+            final boolean hasNextPageSlotPlaceholder = placeholderSlots.contains(nextPageSlot);
+            final boolean hasPreviousPageSlotPlaceholder = placeholderSlots.contains(previousPageSlot);
+            gui.setItem(nextPageSlot, createNextPageGuiItem(nextPageSlot, previousPageSlot, hasNextPageSlotPlaceholder, nextPageItemBuilder, hasPreviousPageSlotPlaceholder, previousPageItemBuilder, placeholderItemBuilder, gui));
         }
         gui.open(player);
     }
 
-    private static @NotNull GuiItem createPreviousPageGuiItem(final @NotNull PaginatedGui gui, final @NotNull GuiConfig guiConfig) {
-        return guiConfig.getPreviousPageItemBuilder().asGuiItem(event -> {
+    private static @NotNull GuiItem createPreviousPageGuiItem(final int nextPageSlot, final int previousPageSlot, final boolean hasNextPageSlotPlaceholder,
+                                                              final @NotNull BaseItemBuilder<?> nextPageItemBuilder, final boolean hasPreviousPageSlotPlaceholder,
+                                                              final @NotNull BaseItemBuilder<?> previousPageItemBuilder, final @NotNull BaseItemBuilder<?> placeholderItemBuilder,
+                                                              final @NotNull PaginatedGui gui) {
+        return previousPageItemBuilder.asGuiItem(event -> {
             gui.previous();
             if (gui.getCurrentPageNum() == 1) {
-                final GuiItem placeholderGuiItem = guiConfig.getPlaceholderItemBuilder().asGuiItem();
-                gui.updateItem(PREVIOUS_PAGE_ITEM_SLOT, placeholderGuiItem);
+                if (hasPreviousPageSlotPlaceholder) {
+                    gui.updateItem(previousPageSlot, placeholderItemBuilder.asGuiItem());
+                } else {
+                    gui.updateItem(previousPageSlot, new ItemStack(Material.AIR));
+                }
             }
-            gui.updateItem(NEXT_PAGE_ITEM_SLOT, createNextPageGuiItem(gui, guiConfig));
+            gui.updateItem(nextPageSlot, createNextPageGuiItem(nextPageSlot, previousPageSlot, hasNextPageSlotPlaceholder, nextPageItemBuilder, hasPreviousPageSlotPlaceholder, previousPageItemBuilder, placeholderItemBuilder, gui));
         });
     }
 
-    private static @NotNull GuiItem createNextPageGuiItem(final @NotNull PaginatedGui gui, final @NotNull GuiConfig guiConfig) {
-        return guiConfig.getNextPageItemBuilder().asGuiItem(event -> {
+    private static @NotNull GuiItem createNextPageGuiItem(final int nextPageSlot, final int previousPageSlot, final boolean hasNextPageSlotPlaceholder,
+                                                          final @NotNull BaseItemBuilder<?> nextPageItemBuilder, final boolean hasPreviousPageSlotPlaceholder,
+                                                          final @NotNull BaseItemBuilder<?> previousPageItemBuilder, final @NotNull BaseItemBuilder<?> placeholderItemBuilder,
+                                                          final @NotNull PaginatedGui gui) {
+        return nextPageItemBuilder.asGuiItem(event -> {
             gui.next();
             if (gui.getCurrentPageNum() == gui.getPagesNum()) {
-                final GuiItem placeholderGuiItem = guiConfig.getPlaceholderItemBuilder().asGuiItem();
-                gui.updateItem(NEXT_PAGE_ITEM_SLOT, placeholderGuiItem);
+                if (hasNextPageSlotPlaceholder) {
+                    gui.updateItem(nextPageSlot, placeholderItemBuilder.asGuiItem());
+                } else {
+                    gui.updateItem(nextPageSlot, new ItemStack(Material.AIR));
+                }
             }
-            gui.updateItem(PREVIOUS_PAGE_ITEM_SLOT, createPreviousPageGuiItem(gui, guiConfig));
+            gui.updateItem(previousPageSlot, createPreviousPageGuiItem(nextPageSlot, previousPageSlot, hasNextPageSlotPlaceholder, nextPageItemBuilder, hasPreviousPageSlotPlaceholder, previousPageItemBuilder, placeholderItemBuilder, gui));
         });
     }
 

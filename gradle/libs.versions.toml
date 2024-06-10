@@ -1,13 +1,13 @@
 [versions]
-runPaper = "2.2.3"
+runPaper = "2.3.0"
 shadow = "8.1.1"
-paperweight = "1.5.12"
+paperweight = "1.7.1"
 lombok = "1.18.32"
 annotations = "24.1.0"
-paperDevBundle = "1.20.4-R0.1-SNAPSHOT"
-betonQuest = "2.0.1"
-placeholderApi = "2.11.5"
-triumphGui = "3.1.7"
+paperDevBundle = "1.20.6-R0.1-SNAPSHOT"
+betonQuest = "2.1.1"
+placeholderApi = "2.11.6"
+triumphGui = "3.1.10"
 
 [plugins]
 runPaper = { id = "xyz.jpenilla.run-paper", version.ref = "runPaper" }

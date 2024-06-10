@@ -36,15 +36,17 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.slf4j.Logger;
 
 @SuppressWarnings("unused")
 public class GraphicalQuests extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        final MessagesConfig messagesConfig = new MessagesConfig();
-        final QuestsConfig questsConfig = new QuestsConfig();
-        final GuiConfig guiConfig = new GuiConfig(questsConfig);
+        final Logger logger = getSLF4JLogger();
+        final MessagesConfig messagesConfig = new MessagesConfig(logger);
+        final QuestsConfig questsConfig = new QuestsConfig(logger);
+        final GuiConfig guiConfig = new GuiConfig(logger, questsConfig);
         final PluginManager pluginManager = Bukkit.getPluginManager();
         pluginManager.registerEvents(new PlayerConnectionListener(questsConfig), this);
         pluginManager.registerEvents(new PlayerQuestListener(questsConfig), this);

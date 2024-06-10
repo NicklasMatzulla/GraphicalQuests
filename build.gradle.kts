@@ -1,5 +1,8 @@
 @file:Suppress("VulnerableLibrariesLocal")
 
+import io.papermc.paperweight.userdev.ReobfArtifactConfiguration
+
+
 /*
 * MIT License
 *
@@ -32,7 +35,7 @@ plugins {
 }
 
 group = "de.nicklasmatzulla"
-version = "1.3.1"
+version = "1.4.0"
 description = "An addon for BetonQuest to display quests in the recipe book and in a GUI."
 
 repositories {
@@ -42,6 +45,7 @@ repositories {
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     maven("https://repo.dmulloy2.net/repository/public/")
     maven("https://jitpack.io")
+    maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
 }
 
 dependencies {
@@ -56,13 +60,12 @@ dependencies {
     implementation(libs.triumphGui)
 }
 
+paperweight.reobfArtifactConfiguration = ReobfArtifactConfiguration.MOJANG_PRODUCTION
+
 tasks {
-    assemble {
-        dependsOn(reobfJar)
-    }
     compileJava {
         options.encoding = Charsets.UTF_8.name()
-        options.release.set(17)
+        options.release.set(21)
     }
     javadoc {
         options.encoding = Charsets.UTF_8.name()
@@ -73,7 +76,7 @@ tasks {
                 "name" to project.name,
                 "version" to project.version,
                 "description" to project.description,
-                "apiVersion" to "1.20"
+                "apiVersion" to "1.20.6"
         )
         inputs.properties(props)
         filesMatching("paper-plugin.yml") {

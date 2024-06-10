@@ -28,6 +28,7 @@ import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
 
 import java.io.File;
 
@@ -42,8 +43,8 @@ public class MessagesConfig extends BaseConfig {
     private Component canceledObjectiveComponent;
     private Component reloadedComponent;
 
-    public MessagesConfig() {
-        super(new File("plugins/GraphicalQuests/messages.yml"), "messages.yml");
+    public MessagesConfig(final @NotNull Logger logger) {
+        super(logger, new File("plugins/GraphicalQuests/messages.yml"), "messages.yml", true);
         init();
     }
 

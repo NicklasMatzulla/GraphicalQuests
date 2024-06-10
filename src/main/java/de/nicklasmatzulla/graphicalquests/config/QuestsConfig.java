@@ -31,8 +31,10 @@ import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.recipe.CraftingBookCategory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 
 import java.io.File;
 import java.util.List;
@@ -40,8 +42,8 @@ import java.util.Map;
 
 public class QuestsConfig extends BaseConfig {
 
-    public QuestsConfig() {
-        super(new File("plugins/GraphicalQuests/quests.yml"), "quests.yml");
+    public QuestsConfig(final @NotNull Logger logger) {
+        super(logger, new File("plugins/GraphicalQuests/quests.yml"), "quests.yml", false);
         init();
     }
 
@@ -69,6 +71,7 @@ public class QuestsConfig extends BaseConfig {
         this.config.set(packageName + ".enabled", true);
         this.config.set(packageName + ".item.recipeBook.material", "REDSTONE");
         this.config.set(packageName + ".item.recipeBook.customModelData", 0);
+        this.config.set(packageName + ".item.recipeBook.category", "REDSTONE");
         this.config.set(packageName + ".item.recipeBook.displayName", "<dark_gray>»</dark_gray> <gradient:#249ae1:#f67200>" + packageName + "</gradient>");
         this.config.set(packageName + ".item.recipeBook.lore", List.of(
                 "<dark_gray><strikethrough>■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■</strikethrough></dark_gray>",
@@ -123,6 +126,16 @@ public class QuestsConfig extends BaseConfig {
 
     public boolean isObjectiveEnabled(final @NotNull String objectiveKey) {
         return this.config.getBoolean(objectiveKey + ".enabled");
+    }
+
+    public @NotNull CraftingBookCategory getRecipeBookCategory(final @NotNull String questKey) {
+        System.out.println(questKey + ".item.recipeBook.category");
+        final String categoryName = this.config.getString(questKey + ".item.recipeBook.category", "REDSTONE");
+        try {
+            return CraftingBookCategory.valueOf(categoryName);
+        } catch (final @NotNull IllegalArgumentException ignored) {
+            return CraftingBookCategory.REDSTONE;
+        }
     }
 
     public @Nullable ItemStack getRecipeBookItemStack(final @NotNull Player player, final @NotNull String questKey) {

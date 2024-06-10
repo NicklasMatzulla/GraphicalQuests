@@ -59,8 +59,10 @@ public class QuestsCommand extends Command {
             Bukkit.clearRecipes();
             this.messagesConfig.load();
             this.messagesConfig.init();
+            this.messagesConfig.update();
             this.guiConfig.load();
             this.guiConfig.init();
+            this.guiConfig.update();
             this.questsConfig.load();
             this.questsConfig.init();
             Bukkit.getOnlinePlayers().forEach(player -> RecipeBookGui.updateRecipeBook(this.questsConfig, player));
