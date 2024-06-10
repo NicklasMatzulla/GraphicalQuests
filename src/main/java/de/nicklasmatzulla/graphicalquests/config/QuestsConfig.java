@@ -129,7 +129,6 @@ public class QuestsConfig extends BaseConfig {
     }
 
     public @NotNull CraftingBookCategory getRecipeBookCategory(final @NotNull String questKey) {
-        System.out.println(questKey + ".item.recipeBook.category");
         final String categoryName = this.config.getString(questKey + ".item.recipeBook.category", "REDSTONE");
         try {
             return CraftingBookCategory.valueOf(categoryName);

@@ -39,7 +39,7 @@ global:
 
 quests:
   rows: 3
-  title: ""
+  title: "<white>ꐮꑦ</white>"
   placeholder_slots: []
   items:
     noQuests:
@@ -71,7 +71,7 @@ quests:
 
 objectives:
   rows: 3
-  title: ""
+  title: "<white>ꐮꑦ</white>"
   placeholder_slots: []
   items:
     noOtherObjectives:

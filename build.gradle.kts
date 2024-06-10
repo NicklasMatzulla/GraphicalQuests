@@ -35,7 +35,7 @@ plugins {
 }
 
 group = "de.nicklasmatzulla"
-version = "1.4.0"
+version = "1.4.1"
 description = "An addon for BetonQuest to display quests in the recipe book and in a GUI."
 
 repositories {
